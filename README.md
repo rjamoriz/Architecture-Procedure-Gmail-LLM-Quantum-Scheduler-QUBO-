@@ -303,21 +303,19 @@ graph TD
 
 ```mermaid
 graph TB
-    subgraph "QUBO Model Construction"
-        Events[Events List] --> Vars[Binary Variables<br/>x(e,t,c)]
-        Consultants[Consultants] --> Vars
-        TimeSlots[Time Slots<br/>09:00-17:00] --> Vars
-        
-        Vars --> Constraints[Constraints Matrix]
-        Constraints --> C1[Each event<br/>scheduled once]
-        Constraints --> C2[No consultant<br/>overlap]
-        Constraints --> C3[Valid working<br/>hours only]
-        
-        Constraints --> Obj[Objective Function]
-        Obj --> O1[Minimize idle gaps]
-        Obj --> O2[Respect preferences]
-        Obj --> O3[Prioritize high-impact]
-    end
+    Events[Events List] --> Vars["Binary Variables: x(e,t,c)"]
+    Consultants[Consultants] --> Vars
+    TimeSlots["Time Slots: 09:00-17:00"] --> Vars
+    
+    Vars --> Constraints[Constraints Matrix]
+    Constraints --> C1["Each event scheduled once"]
+    Constraints --> C2["No consultant overlap"]
+    Constraints --> C3["Valid working hours only"]
+    
+    Constraints --> Obj[Objective Function]
+    Obj --> O1[Minimize idle gaps]
+    Obj --> O2[Respect preferences]
+    Obj --> O3[Prioritize high-impact]
     
     Obj --> QUBO[QUBO Matrix Q]
     QUBO --> Solver{Solver Type?}
@@ -350,12 +348,16 @@ $$x_{e,t,c} = \begin{cases} 1 & \text{if event } e \text{ is assigned to time sl
 
 ### Objective Function
 
-$$\min \left( \alpha \cdot \text{idle\_gaps} + \beta \cdot \text{preference\_penalty} + \gamma \cdot \text{priority\_penalty} \right)$$
+Minimize the following cost function:
+
+```
+min(α · idle_gaps + β · preference_penalty + γ · priority_penalty)
+```
 
 Where:
-- **α (idle gaps):** Minimize wasted time between events
-- **β (preferences):** Respect consultant preferences
-- **γ (priority):** Prioritize high-importance events
+- **α (idle gaps):** Weight for minimizing wasted time between events
+- **β (preferences):** Weight for respecting consultant preferences
+- **γ (priority):** Weight for prioritizing high-importance events
 
 ---
 
